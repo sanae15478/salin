@@ -1,125 +1,100 @@
 import 'package:flutter/material.dart';
-
+import 'package:get/get.dart';
+import 'package:salin/constants/colors.dart';
+import 'package:salin/constants/routes.dart';
+import 'package:salin/controllers/main-controller.dart';
+import 'package:salin/screens/home/home.dart';
+import 'package:salin/screens/new-task/new-task.dart';
+import 'package:salin/screens/loading/loading.dart';
+import 'package:salin/screens/welcome/welcome.dart';
+/*
 void main() {
-  runApp(const MyApp());
+  runApp(App());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class App extends StatelessWidget {
+  MainController mainController = Get.put(MainController());
 
-  // This widget is the root of your application.
+  App({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Tasker',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+        primaryColor: kPrimaryColor,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: TestScreen(), // Set to TestScreen for navigation options
+      routes: {
+        loading_route: (context) => const LoadingScreen(),
+        home_route: (context) => HomeScreen(),
+        welcome_route: (context) => WelcomeScreen(),
+        newtask_route: (context) => NewTaskScreen(),
+      },
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
+// Temporary TestScreen for quick navigation
+class TestScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
+      appBar: AppBar(title: Text('Test Screens')),
       body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+          children: [
+            ElevatedButton(
+              onPressed: () => Navigator.pushNamed(context, loading_route),
+              child: Text('Go to Loading Screen'),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+            ElevatedButton(
+              onPressed: () => Navigator.pushNamed(context, home_route),
+              child: Text('Go to Home Screen'),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.pushNamed(context, welcome_route),
+              child: Text('Go to Welcome Screen'),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.pushNamed(context, newtask_route),
+              child: Text('Go to New Task Screen'),
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+}
+*/
+
+void main() {
+  runApp(App());
+}
+
+// ignore: must_be_immutable
+class App extends StatelessWidget {
+  MainController mainController = Get.put(MainController());
+  final String initRoute = loading_route;
+
+  App({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Tasker',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primaryColor: kPrimaryColor,
+      ),
+      initialRoute: initRoute,
+      routes: {
+        loading_route: (context) => const LoadingScreen(),
+        home_route: (context) => HomeScreen(),
+        welcome_route: (context) => WelcomeScreen(),
+        newtask_route: (context) => NewTaskScreen(),
+      },
     );
   }
 }
