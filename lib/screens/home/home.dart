@@ -13,10 +13,10 @@ import 'package:salin/screens/home/components/tasks/tasks.dart';
 import 'package:salin/screens/home/components/title-text.dart';
 
 class HomeScreen extends StatelessWidget {
-  HomeController homeController = Get.put(HomeController());
-  HomeAnimationsController homeAnimationsController =
+  final HomeController homeController = Get.put(HomeController());
+  final HomeAnimationsController homeAnimationsController =
       Get.put(HomeAnimationsController());
-  int num = 0;
+  final int num = 0;
   late bool _isDark;
 
   HomeScreen({super.key});
@@ -30,6 +30,7 @@ class HomeScreen extends StatelessWidget {
             systemUIOverlayStyle: SystemUIOverlayStyle.BLUE_DARK)
         : setSystemUIOverlayStyle(
             systemUIOverlayStyle: SystemUIOverlayStyle.LIGHT);
+
     homeController.advancedDrawerController.addListener(() {
       Get.find<HomeController>().changeDrawerStatus();
       if (Get.find<HomeController>().drawerStatus == DrawerStatus.OPEN) {
@@ -47,7 +48,9 @@ class HomeScreen extends StatelessWidget {
                 systemUIOverlayStyle: SystemUIOverlayStyle.LIGHT);
       }
     });
+
     startHomeAnimations();
+
     return GetBuilder<HomeController>(
       builder: (_) {
         return AdvancedDrawer(
@@ -66,15 +69,21 @@ class HomeScreen extends StatelessWidget {
           child: Scaffold(
             backgroundColor: _isDark ? kDarkBackgroundColor2 : kBackgroundColor,
             body: SafeArea(
-                child: SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              child: Column(
-                  // children: [HomeNavbar(), HomeTitleText(), HomeTasks()],
-                  ),
-            )),
+              child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: Column(
+                  children: [
+                    HomeNavbar(),
+                    HomeTitleText(),
+                    HomeTasks(), // Ensures tasks display in the home screen
+                  ],
+                ),
+              ),
+            ),
             floatingActionButton: Padding(
-                padding: const EdgeInsets.only(right: 15, bottom: 25),
-                child: HomeFloatingButton()),
+              padding: const EdgeInsets.only(right: 15, bottom: 25),
+              child: HomeFloatingButton(),
+            ),
           ),
         );
       },
