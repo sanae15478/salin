@@ -48,6 +48,7 @@ dependencies:
   url_launcher:
   change_app_package_name:
   google_fonts:
+  firebase_core: ^3.8.0
 
 
 dev_dependencies:
