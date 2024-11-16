@@ -1,22 +1,38 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:salin/constants/colors.dart';
 import 'package:salin/constants/routes.dart';
 import 'package:salin/controllers/main-controller.dart';
+import 'package:salin/screens/authentification/login.dart';
 import 'package:salin/screens/home/home.dart';
 import 'package:salin/screens/new-task/new-task.dart';
 import 'package:salin/screens/loading/loading.dart';
 import 'package:salin/screens/welcome/welcome.dart';
-
+/*
 void main() {
   runApp(App());
+}*/
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MyApp());
 }
 
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(home: LoginPage());
+  }
+}
+
+/*
 // ignore: must_be_immutable
 class App extends StatelessWidget {
   MainController mainController = Get.put(MainController());
   final String initRoute = loading_route;
-
+  
   App({super.key});
   @override
   Widget build(BuildContext context) {
@@ -35,4 +51,4 @@ class App extends StatelessWidget {
       },
     );
   }
-}
+}*/
