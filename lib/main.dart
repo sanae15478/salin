@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:salin/constants/colors.dart';
 import 'package:salin/constants/routes.dart';
 import 'package:salin/controllers/main-controller.dart';
+import 'package:salin/screens/authentification/auth.dart';
 import 'package:salin/screens/authentification/login.dart';
 import 'package:salin/screens/home/home.dart';
 import 'package:salin/screens/new-task/new-task.dart';
@@ -23,7 +24,13 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: LoginPage());
+    return MaterialApp(
+        title: 'Salin',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primaryColor: kPrimaryColor,
+        ),
+        home: AuthScreen());
   }
 }
 
