@@ -20,7 +20,7 @@ void main() async {
   await Firebase.initializeApp();
   runApp(MyApp());
 }
-
+/*
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -33,14 +33,14 @@ class MyApp extends StatelessWidget {
         home: AuthScreen());
   }
 }
+*/
 
-/*
 // ignore: must_be_immutable
-class App extends StatelessWidget {
+class MyApp extends StatelessWidget {
   MainController mainController = Get.put(MainController());
   final String initRoute = loading_route;
-  
-  App({super.key});
+
+  MyApp({super.key});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -58,4 +58,4 @@ class App extends StatelessWidget {
       },
     );
   }
-}*/
+}

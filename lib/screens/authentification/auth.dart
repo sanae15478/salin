@@ -23,15 +23,15 @@ class AuthScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Title
-                Text(
-                  "Salin",
-                  style: GoogleFonts.lato(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: kPrimaryColor,
-                  ),
+                // Logo
+                Image.asset(
+                  'assets/images/logosalin.png',
+                  height: 400, // Adjust the height as needed
+                  width: 400, // Adjust the width as needed
+                  fit: BoxFit.contain, // Adjust the fit for the image
                 ),
+                const SizedBox(height: 20),
+
                 const SizedBox(height: 40),
                 // Google Sign-In Button
                 ElevatedButton(
