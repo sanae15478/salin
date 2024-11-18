@@ -20,7 +20,7 @@ void main() async {
   await Firebase.initializeApp();
   runApp(MyApp());
 }
-/*
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -33,8 +33,8 @@ class MyApp extends StatelessWidget {
         home: AuthScreen());
   }
 }
-*/
 
+/*
 // ignore: must_be_immutable
 class MyApp extends StatelessWidget {
   MainController mainController = Get.put(MainController());
@@ -59,3 +59,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+*/

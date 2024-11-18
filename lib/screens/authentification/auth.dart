@@ -43,7 +43,7 @@ class AuthScreen extends StatelessWidget {
                     padding:
                         const EdgeInsets.symmetric(vertical: 16), // Full height
                   ),
-                  onPressed: authController.signInWithGoogle,
+                  onPressed: () => authController.signInWithGoogle(context),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -107,9 +107,9 @@ class AuthScreen extends StatelessWidget {
                     ),
                   ),
                   onPressed: () => authController.signInWithEmailPassword(
-                    emailController.text.trim(),
-                    passwordController.text.trim(),
-                  ),
+                      emailController.text.trim(),
+                      passwordController.text.trim(),
+                      context),
                   child: Text(
                     "Sign in",
                     style: GoogleFonts.roboto(

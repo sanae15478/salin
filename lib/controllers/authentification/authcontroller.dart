@@ -1,12 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:get/get.dart';
+import 'package:flutter/material.dart';
+import 'package:salin/screens/grocery/grocerylist.dart';
 
-class AuthController extends GetxController {
+class AuthController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   // Sign in with Google
-  Future<void> signInWithGoogle() async {
+  Future<void> signInWithGoogle(BuildContext context) async {
     try {
       final GoogleSignIn googleSignIn = GoogleSignIn();
       final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
@@ -21,20 +22,37 @@ class AuthController extends GetxController {
         );
 
         await _auth.signInWithCredential(credential);
-        Get.snackbar("Success", "Logged in with Google");
+
+        // Successful login, redirect to GroceryListScreen
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => GroceryListScreen()),
+        );
       }
     } catch (e) {
-      Get.snackbar("Error", "Google Sign-In failed: $e");
+      // Handle errors, such as showing a snackbar
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Google Sign-In failed: $e")),
+      );
     }
   }
 
   // Sign in with Email and Password
-  Future<void> signInWithEmailPassword(String email, String password) async {
+  Future<void> signInWithEmailPassword(
+      String email, String password, BuildContext context) async {
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
-      Get.snackbar("Success", "Logged in with Email");
+
+      // Successful login, redirect to GroceryListScreen
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => GroceryListScreen()),
+      );
     } catch (e) {
-      Get.snackbar("Error", "Email Sign-In failed: $e");
+      // Handle errors, such as showing a snackbar
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Email Sign-In failed: $e")),
+      );
     }
   }
 }
