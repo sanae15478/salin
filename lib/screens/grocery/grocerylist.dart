@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class GroceryListScreen extends StatelessWidget {
   final CollectionReference groceryItems =
-      FirebaseFirestore.instance.collection('grocery_items');
+      FirebaseFirestore.instance.collection('grocery_item');
 
   @override
   Widget build(BuildContext context) {

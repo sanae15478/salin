@@ -6,6 +6,7 @@ import 'package:salin/constants/routes.dart';
 import 'package:salin/controllers/main-controller.dart';
 import 'package:salin/screens/authentification/auth.dart';
 import 'package:salin/screens/authentification/login.dart';
+import 'package:salin/screens/grocery/grocerylist.dart';
 import 'package:salin/screens/home/home.dart';
 import 'package:salin/screens/new-task/new-task.dart';
 import 'package:salin/screens/loading/loading.dart';
@@ -14,7 +15,35 @@ import 'package:salin/screens/welcome/welcome.dart';
 void main() {
   runApp(App());
 }*/
+import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
+/*
+class AuthWrapper extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+
+    return StreamBuilder<User?>(
+      stream: _auth.authStateChanges(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+              child: CircularProgressIndicator()); // Show a loading spinner
+        }
+
+        if (snapshot.hasData && snapshot.data != null) {
+          // User is signed in, redirect to GroceryListScreen
+          return GroceryListScreen();
+        } else {
+          // User is not signed in, redirect to LoginScreen
+          return AuthScreen();
+        }
+      },
+    );
+  }
+}
+*/
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
