@@ -13,7 +13,7 @@ class LoginPage extends StatelessWidget {
         final GoogleSignInAuthentication googleAuth =
             await googleUser.authentication;
         final AuthCredential credential = GoogleAuthProvider.credential(
-          accessToken: googleAuth.accessToken,
+         accessToken: googleAuth.accessToken,
           idToken: googleAuth.idToken,
         );
         await _auth.signInWithCredential(credential);
