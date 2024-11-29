@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:salin/constants/colors.dart';
 import 'package:salin/controllers/authentification/authcontroller.dart';
+import 'package:salin/screens/authentification/signup.widgets/signup.dart'; // Import de la page Signup
 
 class AuthScreen extends StatefulWidget {
   @override
@@ -57,8 +58,7 @@ class _AuthScreenState extends State<AuthScreen>
       body: SafeArea(
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.symmetric(
-                horizontal: 24.0), // More padding for a cleaner look
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -70,15 +70,11 @@ class _AuthScreenState extends State<AuthScreen>
                     child: Transform.translate(
                       offset: Offset(
                           0,
-                          50 *
-                              (1 -
-                                  _logoAnimation
-                                      .value)), // Slight vertical animation
+                          50 * (1 - _logoAnimation.value)), // Slight vertical animation
                       child: Image.asset(
                         'assets/images/logosalin.png',
-                        height:
-                            200, // Adjust the height for a more balanced design
-                        width: 200, // Adjust the width for a better proportion
+                        height: 200,
+                        width: 200,
                         fit: BoxFit.contain,
                       ),
                     ),
@@ -93,11 +89,11 @@ class _AuthScreenState extends State<AuthScreen>
                       decoration: InputDecoration(
                         labelText: "Email",
                         labelStyle: GoogleFonts.openSans(
-                          color: Colors.grey[600], // Softer label color
+                          color: Colors.grey[600],
                         ),
                         hintText: "Enter your email",
                         hintStyle: GoogleFonts.openSans(
-                          color: Colors.grey[400], // Softer hint text color
+                          color: Colors.grey[400],
                         ),
                         filled: true,
                         fillColor: Colors.white,
@@ -106,8 +102,7 @@ class _AuthScreenState extends State<AuthScreen>
                           borderSide: BorderSide.none,
                         ),
                         contentPadding: const EdgeInsets.symmetric(
-                            vertical: 18,
-                            horizontal: 20), // Adjust content padding
+                            vertical: 18, horizontal: 20),
                       ),
                     ),
                   ),
@@ -128,7 +123,7 @@ class _AuthScreenState extends State<AuthScreen>
                             _isPasswordVisible
                                 ? Icons.visibility
                                 : Icons.visibility_off,
-                            color: Colors.grey[600], // Eye icon color
+                            color: Colors.grey[600],
                           ),
                           onPressed: () {
                             setState(() {
@@ -181,14 +176,13 @@ class _AuthScreenState extends State<AuthScreen>
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.white,
-                        backgroundColor:
-                            kPrimaryColor, // Text color when the button is pressed
+                        backgroundColor: kPrimaryColor,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
                         padding: const EdgeInsets.symmetric(
                             vertical: 16, horizontal: 32),
-                        elevation: 5, // Subtle shadow to elevate the button
+                        elevation: 5,
                       ),
                       onPressed: () => authController.signInWithEmailPassword(
                         emailController.text.trim(),
@@ -199,8 +193,7 @@ class _AuthScreenState extends State<AuthScreen>
                         "Sign in",
                         style: GoogleFonts.roboto(
                           fontSize: 16,
-                          fontWeight:
-                              FontWeight.w600, // Bold for better emphasis
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
@@ -218,7 +211,7 @@ class _AuthScreenState extends State<AuthScreen>
                         "Forgot Password?",
                         style: GoogleFonts.roboto(
                           fontSize: 14,
-                          color: kPrimaryColor, // Matching the primary color
+                          color: kPrimaryColor,
                         ),
                       ),
                     ),
@@ -230,13 +223,14 @@ class _AuthScreenState extends State<AuthScreen>
                     opacity: _fieldAnimation,
                     child: TextButton(
                       onPressed: () {
-                        // Handle Sign Up navigation
+                        // Navigation vers la page Signup
+                        Get.to(() => SignupScreen());
                       },
                       child: Text(
                         "Don't have an account? Sign Up",
                         style: GoogleFonts.roboto(
                           fontSize: 14,
-                          color: Colors.blue[700], // Blue color for emphasis
+                          color: Colors.blue[700],
                         ),
                       ),
                     ),
