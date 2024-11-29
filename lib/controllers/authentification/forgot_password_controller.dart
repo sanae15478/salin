@@ -10,4 +10,4 @@ class ForgotPasswordController {
       return e.toString(); // Return the error message if it occurs
     }
   }
-}novico
+}
