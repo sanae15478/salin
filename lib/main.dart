@@ -5,7 +5,6 @@ import 'package:salin/constants/colors.dart';
 import 'package:salin/constants/routes.dart';
 import 'package:salin/controllers/main-controller.dart';
 import 'package:salin/screens/authentification/auth.dart';
-import 'package:salin/screens/authentification/login.dart';
 import 'package:salin/screens/grocery/grocerylist.dart';
 import 'package:salin/screens/home/home.dart';
 import 'package:salin/screens/new-task/new-task.dart';
