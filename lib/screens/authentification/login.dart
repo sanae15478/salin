@@ -3,7 +3,8 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:salin/constants/colors.dart';
 import 'package:salin/controllers/authentification/authcontroller.dart';
-import 'package:salin/screens/authentification/signup.widgets/signup.dart'; // Import de la page Signup
+import 'package:salin/screens/authentification/password_config/forgot_password.dart';
+import 'package:salin/screens/authentification/signup.dart'; // Import de la page Signup
 
 class AuthScreen extends StatefulWidget {
   @override
@@ -206,6 +207,11 @@ class _AuthScreenState extends State<AuthScreen>
                     child: TextButton(
                       onPressed: () {
                         // Handle Forgot Password logic here
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => ForgotPasswordPage()),
+                        );
+
                       },
                       child: Text(
                         "Forgot Password?",

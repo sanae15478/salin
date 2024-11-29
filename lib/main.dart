@@ -2,8 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:salin/constants/colors.dart';
-import 'package:salin/screens/authentification/auth.dart';
-import 'package:salin/screens/authentification/signup.widgets/signup.dart';
+import 'package:salin/screens/authentification/login.dart';
+import 'package:salin/screens/authentification/signup.dart';
 import 'package:salin/screens/grocery/grocerylist.dart';
 
 void main() async {
