@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../../constants/colors.dart';
+
 class EmailVerificationScreen extends StatefulWidget {
   @override
   _EmailVerificationScreenState createState() =>
@@ -50,6 +52,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
         title: Text('Vérification de l\'email'),
         centerTitle: true,
       ),
+      backgroundColor: kBackgroundColor,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Center(

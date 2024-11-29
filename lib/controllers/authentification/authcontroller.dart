@@ -20,7 +20,12 @@ class AuthController {
           accessToken: googleAuth.accessToken,
           idToken: googleAuth.idToken,
         );
-
+        /*
+        if (!userCredential.user!.emailVerified) {
+          Get.offNamed('/verify-email'); // Rediriger vers l'écran de vérification
+        } else {
+          Get.offNamed('/grocery'); // Rediriger vers l'écran des courses
+        }*/
         await _auth.signInWithCredential(credential);
 
         // Successful login, redirect to GroceryListScreen
