@@ -30,7 +30,7 @@ class HomeTasks extends StatelessWidget {
                     duration: _animationDuration,
                     opacity: _.tasksTitleOpacity,
                     child: Text(
-                      "TODAY'S TASKS",
+                      "Groceries",
                       style: TextStyle(
                           fontSize: 12.5,
                           fontWeight: FontWeight.bold,
@@ -62,7 +62,7 @@ class HomeTasks extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-            const HomeTasksItems()
+            HomeTasksItems()
           ],
         ),
       );
