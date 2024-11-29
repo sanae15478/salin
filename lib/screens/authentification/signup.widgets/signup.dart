@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -32,13 +33,8 @@ class _SignupScreenState extends State<SignupScreen> {
           password: _passwordController.text.trim(),
         );
 
-        // Affichage d'un message de succès
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Compte créé avec succès !')),
-        );
-
-        // Redirection ou fermeture de l'écran d'inscription
-        Navigator.pop(context);
+        // Rediriger vers l'écran de vérification d'email
+        Get.offNamed('/verify-email');
       } on FirebaseAuthException catch (e) {
         String message;
         if (e.code == 'weak-password') {
