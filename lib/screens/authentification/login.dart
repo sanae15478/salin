@@ -1,20 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:salin/constants/colors.dart';
-import 'package:salin/controllers/authentification/authcontroller.dart';
-import 'package:salin/screens/authentification/password_config/forgot_password.dart';
-import 'package:salin/screens/authentification/signup.dart'; // Import de la page Signup
+import 'package:salin/screens/authentification/signup.widgets/signup.dart';
 
 class AuthScreen extends StatefulWidget {
   @override
   _AuthScreenState createState() => _AuthScreenState();
 }
 
-class _AuthScreenState extends State<AuthScreen>
-    with SingleTickerProviderStateMixin {
-  final AuthController authController = Get.put(AuthController());
-
+class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateMixin {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
@@ -49,7 +45,28 @@ class _AuthScreenState extends State<AuthScreen>
   @override
   void dispose() {
     _controller.dispose();
+    emailController.dispose();
+    passwordController.dispose();
     super.dispose();
+  }
+
+  void _signIn() async {
+    try {
+      final userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+      );
+
+      if (!userCredential.user!.emailVerified) {
+        Get.offNamed('/verify-email'); // Rediriger vers l'écran de vérification
+      } else {
+        Get.offNamed('/grocery'); // Rediriger vers l'écran des courses
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Échec de la connexion. Veuillez réessayer.')),
+      );
+    }
   }
 
   @override
@@ -65,13 +82,10 @@ class _AuthScreenState extends State<AuthScreen>
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // Logo with animation
                   FadeTransition(
                     opacity: _logoAnimation,
                     child: Transform.translate(
-                      offset: Offset(
-                          0,
-                          50 * (1 - _logoAnimation.value)), // Slight vertical animation
+                      offset: Offset(0, 50 * (1 - _logoAnimation.value)),
                       child: Image.asset(
                         'assets/images/logosalin.png',
                         height: 200,
@@ -81,50 +95,31 @@ class _AuthScreenState extends State<AuthScreen>
                     ),
                   ),
                   const SizedBox(height: 40),
-
-                  // Email Field with fade-in animation
                   FadeTransition(
                     opacity: _fieldAnimation,
                     child: TextField(
                       controller: emailController,
                       decoration: InputDecoration(
                         labelText: "Email",
-                        labelStyle: GoogleFonts.openSans(
-                          color: Colors.grey[600],
-                        ),
                         hintText: "Enter your email",
-                        hintStyle: GoogleFonts.openSans(
-                          color: Colors.grey[400],
-                        ),
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide.none,
                         ),
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 18, horizontal: 20),
                       ),
                     ),
                   ),
                   const SizedBox(height: 20),
-
-                  // Password Field with Eye Icon and fade-in animation
                   FadeTransition(
                     opacity: _fieldAnimation,
                     child: TextField(
                       controller: passwordController,
                       decoration: InputDecoration(
                         labelText: "Password",
-                        labelStyle: GoogleFonts.openSans(
-                          color: Colors.grey[600],
-                        ),
                         suffixIcon: IconButton(
                           icon: Icon(
-                            _isPasswordVisible
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-                            color: Colors.grey[600],
+                            _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
                           ),
                           onPressed: () {
                             setState(() {
@@ -136,17 +131,12 @@ class _AuthScreenState extends State<AuthScreen>
                         fillColor: Colors.white,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide.none,
                         ),
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 18, horizontal: 20),
                       ),
                       obscureText: !_isPasswordVisible,
                     ),
                   ),
                   const SizedBox(height: 20),
-
-                  // Remember Me Row with fade-in animation
                   FadeTransition(
                     opacity: _fieldAnimation,
                     child: Row(
@@ -160,86 +150,24 @@ class _AuthScreenState extends State<AuthScreen>
                           },
                           activeColor: kPrimaryColor,
                         ),
-                        Text(
-                          "Remember Me",
-                          style: GoogleFonts.openSans(
-                            color: Colors.grey[600],
-                          ),
-                        ),
+                        Text("Remember Me"),
                       ],
                     ),
                   ),
                   const SizedBox(height: 20),
-
-                  // Sign In Button with scale animation
                   ScaleTransition(
                     scale: _fieldAnimation,
                     child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: kPrimaryColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 16, horizontal: 32),
-                        elevation: 5,
-                      ),
-                      onPressed: () => authController.signInWithEmailPassword(
-                        emailController.text.trim(),
-                        passwordController.text.trim(),
-                        context,
-                      ),
-                      child: Text(
-                        "Sign in",
-                        style: GoogleFonts.roboto(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
+                      onPressed: _signIn,
+                      child: Text("Sign in"),
                     ),
                   ),
                   const SizedBox(height: 20),
-
-                  // Forgot Password Text Button with fade-in animation
-                  FadeTransition(
-                    opacity: _fieldAnimation,
-                    child: TextButton(
-                      onPressed: () {
-                        // Handle Forgot Password logic here
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => ForgotPasswordPage()),
-                        );
-
-                      },
-                      child: Text(
-                        "Forgot Password?",
-                        style: GoogleFonts.roboto(
-                          fontSize: 14,
-                          color: kPrimaryColor,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-
-                  // Sign Up Text Button with fade-in animation
-                  FadeTransition(
-                    opacity: _fieldAnimation,
-                    child: TextButton(
-                      onPressed: () {
-                        // Navigation vers la page Signup
-                        Get.to(() => SignupScreen());
-                      },
-                      child: Text(
-                        "Don't have an account? Sign Up",
-                        style: GoogleFonts.roboto(
-                          fontSize: 14,
-                          color: Colors.blue[700],
-                        ),
-                      ),
-                    ),
+                  TextButton(
+                    onPressed: () {
+                      Get.to(() => SignupScreen());
+                    },
+                    child: Text("Don't have an account? Sign Up"),
                   ),
                 ],
               ),

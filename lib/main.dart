@@ -5,6 +5,7 @@ import 'package:salin/constants/colors.dart';
 import 'package:salin/screens/authentification/login.dart';
 import 'package:salin/screens/authentification/signup.dart';
 import 'package:salin/screens/grocery/grocerylist.dart';
+import 'package:salin/screens/authentification/EmailVerificationScreen.dart'; // Import Email Verification
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/auth', page: () => AuthScreen()),
         GetPage(name: '/signup', page: () => SignupScreen()),
         GetPage(name: '/grocery', page: () => GroceryListScreen()),
+        GetPage(name: '/verify-email', page: () => EmailVerificationScreen()), // Nouvelle route
       ],
     );
   }
