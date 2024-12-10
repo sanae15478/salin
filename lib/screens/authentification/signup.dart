@@ -1,56 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:salin/constants/colors.dart';
 
-import 'login.dart';
+import '../../constants/colors.dart'; // Adjust the import path for kBackgroundColor
 
 class SignupScreen extends StatefulWidget {
   @override
   _SignupScreenState createState() => _SignupScreenState();
 }
 
-class _SignupScreenState extends State<SignupScreen> with SingleTickerProviderStateMixin {
+class _SignupScreenState extends State<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
-
-  bool _isPasswordVisible = false;
   bool _isLoading = false;
-
-  late AnimationController _controller;
-  late Animation<double> _fieldAnimation;
-  late Animation<double> _logoAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-
-    // Initialize AnimationController
-    _controller = AnimationController(
-      duration: const Duration(seconds: 1),
-      vsync: this,
-    );
-
-    _logoAnimation = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
-
-    _fieldAnimation = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
-
-    _controller.forward(); // Start animation
-  }
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
-    _confirmPasswordController.dispose();
-    _controller.dispose();
     super.dispose();
   }
 
@@ -61,13 +29,13 @@ class _SignupScreenState extends State<SignupScreen> with SingleTickerProviderSt
       });
 
       try {
-        // Create a user with Firebase Authentication
+        // Création d'un utilisateur avec Firebase Authentication
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: _emailController.text.trim(),
           password: _passwordController.text.trim(),
         );
 
-        // Redirect to email verification screen
+        // Rediriger vers l'écran de vérification d'email
         Get.offNamed('/verify-email');
       } on FirebaseAuthException catch (e) {
         String message;
@@ -79,7 +47,7 @@ class _SignupScreenState extends State<SignupScreen> with SingleTickerProviderSt
           message = 'Une erreur est survenue. Veuillez réessayer.';
         }
 
-        // Display error message
+        // Affichage d'un message d'erreur
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(message)),
         );
@@ -94,143 +62,123 @@ class _SignupScreenState extends State<SignupScreen> with SingleTickerProviderSt
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Inscription', style: TextStyle(color: Colors.black)),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        elevation: 0,
+      ),
       backgroundColor: kBackgroundColor,
-      body: SafeArea(
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  // Logo with animation
-                  FadeTransition(
-                    opacity: _logoAnimation,
-                    child: Transform.translate(
-                      offset: Offset(0, 50 * (1 - _logoAnimation.value)),
-                      child: Image.asset(
-                        'assets/images/avatar.png',
-                        height: 200,
-                        width: 200,
-                        fit: BoxFit.contain,
-                      ),
-                    ),
+      body: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Add an Icon or Image to the top of the signup screen
+                Center(
+                  child: Icon(
+                    Icons.app_registration,
+                    size: 100,
+                    color: Colors.teal,
                   ),
-                  const SizedBox(height: 40),
+                ),
+                SizedBox(height: 40),
 
-                  // Email field with fade-in animation
-                  FadeTransition(
-                    opacity: _fieldAnimation,
-                    child: TextField(
-                      controller: _emailController,
-                      decoration: InputDecoration(
-                        labelText: "Email",
-                        labelStyle: GoogleFonts.openSans(color: Colors.grey[600]),
-                        hintText: "Enter your email",
-                        hintStyle: GoogleFonts.openSans(color: Colors.grey[400]),
-                        filled: true,
-                        fillColor: Colors.white,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide.none,
-                        ),
-                        contentPadding: const EdgeInsets.symmetric(vertical: 18, horizontal: 20),
-                      ),
-                    ),
+                // Signup heading with bold text
+                Text(
+                  'Créer un compte',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
                   ),
-                  const SizedBox(height: 20),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 40),
 
-                  // Password field with eye icon and fade-in animation
-                  FadeTransition(
-                    opacity: _fieldAnimation,
-                    child: TextField(
-                      controller: _passwordController,
-                      decoration: InputDecoration(
-                        labelText: "Password",
-                        labelStyle: GoogleFonts.openSans(color: Colors.grey[600]),
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                            color: Colors.grey[600],
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _isPasswordVisible = !_isPasswordVisible;
-                            });
-                          },
-                        ),
-                        filled: true,
-                        fillColor: Colors.white,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide.none,
-                        ),
-                        contentPadding: const EdgeInsets.symmetric(vertical: 18, horizontal: 20),
-                      ),
-                      obscureText: !_isPasswordVisible,
-                    ),
+                // Email TextField with icon
+                TextFormField(
+                  controller: _emailController,
+                  decoration: InputDecoration(
+                    labelText: 'Email',
+                    labelStyle: TextStyle(color: Colors.black),
+                    border: OutlineInputBorder(),
+                    filled: true,
+                    fillColor: Colors.white,
+                    prefixIcon: Icon(Icons.email, color: Colors.teal), // Icon added
                   ),
-                  const SizedBox(height: 20),
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Veuillez entrer un email.';
+                    }
+                    if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                      return 'Veuillez entrer un email valide.';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 16),
 
-                  // Confirm Password field with fade-in animation
-                  FadeTransition(
-                    opacity: _fieldAnimation,
-                    child: TextField(
-                      controller: _confirmPasswordController,
-                      decoration: InputDecoration(
-                        labelText: "Confirm Password",
-                        labelStyle: GoogleFonts.openSans(color: Colors.grey[600]),
-                        filled: true,
-                        fillColor: Colors.white,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide.none,
-                        ),
-                        contentPadding: const EdgeInsets.symmetric(vertical: 18, horizontal: 20),
-                      ),
-                      obscureText: !_isPasswordVisible,
-                    ),
+                // Password TextField with icon
+                TextFormField(
+                  controller: _passwordController,
+                  decoration: InputDecoration(
+                    labelText: 'Mot de passe',
+                    labelStyle: TextStyle(color: Colors.black),
+                    border: OutlineInputBorder(),
+                    filled: true,
+                    fillColor: Colors.white,
+                    prefixIcon: Icon(Icons.lock, color: Colors.teal), // Icon added
                   ),
-                  const SizedBox(height: 20),
+                  obscureText: true,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Veuillez entrer un mot de passe.';
+                    }
+                    if (value.length < 6) {
+                      return 'Le mot de passe doit comporter au moins 6 caractères.';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 32),
 
-                  // Sign Up button with fade-in animation
-                  FadeTransition(
-                    opacity: _fieldAnimation,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: Colors.teal,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 170),
-                        elevation: 5,
-                      ),
-                      onPressed: _signup,
-                      child: Text(
-                        "Sign Up",
-                        style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w600),
-                      ),
-                    ),
+                // Loading indicator or Sign Up Button
+                _isLoading
+                    ? Center(child: CircularProgressIndicator())
+                    : ElevatedButton(
+                  onPressed: _signup,
+                  child: Text(
+                    'S\'inscrire',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                   ),
-                  const SizedBox(height: 20),
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.teal,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 80),
+                    elevation: 5,
+                  ),
+                ),
+                SizedBox(height: 16),
 
-                  // Already have an account text
-                  FadeTransition(
-                    opacity: _fieldAnimation,
-                    child: TextButton(
-                      onPressed: () {
-                        Get.to(() => AuthScreen()); // Go to Login screen
-                      },
-                      child: Text(
-                        "Already have an account? Log In",
-                        style: GoogleFonts.roboto(fontSize: 14, color: Colors.teal),
-                      ),
-                    ),
+                // Login text button with consistent style
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context); // Retour à l'écran précédent
+                  },
+                  child: Text(
+                    'Vous avez déjà un compte ? Connectez-vous.',
+                    style: TextStyle(color: Colors.black), // Text color
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

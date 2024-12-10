@@ -183,7 +183,7 @@ class _AuthScreenState extends State<AuthScreen>
                           borderRadius: BorderRadius.circular(12),
                         ),
                         padding: const EdgeInsets.symmetric(
-                            vertical: 16, horizontal: 175),
+                            vertical: 16, horizontal: 140),
                         elevation: 5,
                       ),
                       onPressed: () => authController.signInWithEmailPassword(
