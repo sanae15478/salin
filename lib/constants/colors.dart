@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 // Light mode colors
 const kPrimaryColor = Color(0xff0E1F55);
 const kSecondaryColor = Color(0xff2BBDEE);
-const kBackgroundColor = Color(0xffF9FAFF);
+const kBackgroundColor = Color(0xfffcfaf6);
 
 // Dark mode colors
 const kDarkBackgroundColor = Color(0xff031956);

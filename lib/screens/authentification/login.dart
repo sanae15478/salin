@@ -55,6 +55,7 @@ class _AuthScreenState extends State<AuthScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       backgroundColor: kBackgroundColor,
       body: SafeArea(
         child: Center(
@@ -73,7 +74,7 @@ class _AuthScreenState extends State<AuthScreen>
                           0,
                           50 * (1 - _logoAnimation.value)), // Slight vertical animation
                       child: Image.asset(
-                        'assets/images/salinlogo.png',
+                        'assets/images/avatar.png',
                         height: 200,
                         width: 200,
                         fit: BoxFit.contain,
@@ -177,12 +178,12 @@ class _AuthScreenState extends State<AuthScreen>
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.white,
-                        backgroundColor: kPrimaryColor,
+                        backgroundColor: Colors.teal,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
                         padding: const EdgeInsets.symmetric(
-                            vertical: 16, horizontal: 32),
+                            vertical: 16, horizontal: 175),
                         elevation: 5,
                       ),
                       onPressed: () => authController.signInWithEmailPassword(
@@ -232,7 +233,7 @@ class _AuthScreenState extends State<AuthScreen>
                         "Don't have an account? Sign Up",
                         style: GoogleFonts.roboto(
                           fontSize: 14,
-                          color: Colors.blue[700],
+                          color: Colors.teal,
                         ),
                       ),
                     ),
