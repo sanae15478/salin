@@ -8,10 +8,43 @@ import 'package:salin/screens/authentification/signup.dart';
 import 'package:salin/screens/grocery/grocerylist.dart';
 import 'package:salin/screens/authentification/EmailVerificationScreen.dart'; // Import Email Verification
 import 'package:flutter/material.dart';
+import 'package:salin/screens/ui/HomeScreen.dart';
 import 'package:salin/screens/ui/home.dart';
 import 'package:salin/screens/ui/shopping_list.dart';
+import 'package:flutter/material.dart';
+import 'controllers/homecontroller.dart';
+
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'controllers/homecontroller.dart';
 
 
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(); // Initialize Firebase
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Shopping List App',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      // Initial route to the HomeScreen
+      home:  HomeScreen(),
+    );
+  }
+}
+
+
+/*
 void main() {
   runApp(const MyApp());
 }
@@ -89,7 +122,11 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return getView();
   }
-}
+}*/
+
+
+
+
 /*
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
