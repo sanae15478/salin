@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:salin/models/shopping_item.dart';
 
-import '../../models/shopping_item.dart';
+import '../../controllers/FirestoreService.dart';
 
-
-class ShoppingItemList extends StatefulWidget {
+class ShoppingItemList extends StatelessWidget {
   final ShoppingItem item;
+  final String listName;
 
-  const ShoppingItemList({
+   ShoppingItemList({
     super.key,
     required this.item,
+    required this.listName,
   });
 
-  @override
-  State<ShoppingItemList> createState() => _ShoppingItemListState();
-}
+  final FirestoreService _firestoreService = FirestoreService();
 
-class _ShoppingItemListState extends State<ShoppingItemList> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -33,34 +32,36 @@ class _ShoppingItemListState extends State<ShoppingItemList> {
           Row(
             children: [
               Checkbox(
-                value: widget.item.isBought,
+                value: item.isBought,
                 activeColor: const Color.fromRGBO(240, 234, 253, 1.0),
                 checkColor: const Color.fromRGBO(130, 83, 233, 1.0),
                 onChanged: (bool? value) {
-                  setState(() {
-                    widget.item.isBought = value!;
-                  });
+                  if (value != null) {
+                    _firestoreService.updateShoppingItem(
+                        listName, item.id!, value);
+                  }
                 },
               ),
               Expanded(
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    widget.item.itemName!,
-                    style: (widget.item.isBought)
-                        ? const TextStyle(
-                            fontSize: 22.0,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.grey,
-                            decoration: TextDecoration.lineThrough,
-                            decorationColor: Colors.grey,
-                            decorationThickness: 2.0)
-                        : const TextStyle(fontSize: 22.0, fontWeight: FontWeight.w500),
+                    item.itemName!,
+                    style: TextStyle(
+                      fontSize: 22.0,
+                      fontWeight: FontWeight.w500,
+                      color: item.isBought ? Colors.grey : Colors.black,
+                      decoration: item.isBought
+                          ? TextDecoration.lineThrough
+                          : null,
+                      decorationColor: Colors.grey,
+                      decorationThickness: 2.0,
+                    ),
                   ),
                 ),
               ),
               Text(
-                widget.item.quantity!.toString(),
+                item.quantity!.toString(),
                 style: const TextStyle(
                   fontSize: 22.0,
                   color: Colors.grey,

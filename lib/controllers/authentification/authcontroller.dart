@@ -1,7 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/material.dart';
-import 'package:salin/screens/grocery/grocerylist.dart';
+
+import '../../screens/ui/home.dart';
 
 class AuthController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -31,7 +32,7 @@ class AuthController {
         // Successful login, redirect to GroceryListScreen
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => GroceryListScreen()),
+          MaterialPageRoute(builder: (context) => Home()),
         );
       }
     } catch (e) {
@@ -51,7 +52,7 @@ class AuthController {
       // Successful login, redirect to GroceryListScreen
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => GroceryListScreen()),
+        MaterialPageRoute(builder: (context) => Home()),
       );
     } catch (e) {
       // Handle errors, such as showing a snackbar

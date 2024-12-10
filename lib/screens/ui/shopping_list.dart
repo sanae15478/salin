@@ -45,7 +45,7 @@ class _ShoppingListState extends State<ShoppingList> {
               itemCount: widget.shoppingLists!.length,
               itemBuilder: (BuildContext context, int index) {
                 return ShoppingItemList(
-                  item: widget.shoppingLists![index],
+                  item: widget.shoppingLists![index], listName: '',
                 );
               }),
         ),

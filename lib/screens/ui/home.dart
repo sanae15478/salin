@@ -1,23 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:salin/screens/ui/shopping_item_list.dart';
+import 'package:salin/screens/ui/shopping_list.dart';
 
-import 'list_item.dart';
+import 'package:salin/models/shopping_item.dart';
 
-class Home extends StatefulWidget {
-  final List<String> shoppingLists;
-  final Function addNewShoppingList;
-  final Function openShoppingList;
-  const Home({
-    super.key,
-    required this.shoppingLists,
-    required this.addNewShoppingList,
-    required this.openShoppingList,
-  });
+import '../../controllers/FirestoreService.dart';
+import '../authentification/profile.dart';
 
-  @override
-  State<Home> createState() => _HomeState();
-}
+class Home extends StatelessWidget {
+  final FirestoreService _firestoreService = FirestoreService();
 
-class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,21 +18,44 @@ class _HomeState extends State<Home> {
         surfaceTintColor: Colors.orange,
         backgroundColor: Colors.white,
         title: const Text('Shopping list'),
+        actions: [
+          // Profile Icon added in AppBar
+          IconButton(
+            icon: Icon(Icons.account_circle, color: Colors.black), // Profile icon
+            onPressed: () {
+              // Navigate to ProfileScreen when icon is tapped
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ProfileScreen()),
+              );
+            },
+          ),
+        ],
       ),
-      body: Center(
-        child: Container(
-          margin: const EdgeInsets.only(bottom: 130.0),
-          child: ListView.builder(
-              itemCount: widget.shoppingLists.length,
-              itemBuilder: (BuildContext context, int index) {
-                return ListItem(
-                  item: widget.shoppingLists[index],
-                  onTap: () {
-                    widget.openShoppingList(widget.shoppingLists[index]);
-                  },
-                );
-              }),
-        ),
+      body: StreamBuilder<List<ShoppingItem>>(
+        stream: _firestoreService.getShoppingItems('myShoppingList'), // Replace 'myShoppingList' with the actual list name
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(child: Text('No items found.'));
+          }
+
+          final shoppingItems = snapshot.data!;
+
+          return ListView.builder(
+            itemCount: shoppingItems.length,
+            itemBuilder: (context, index) {
+              final item = shoppingItems[index];
+              return ShoppingItemList(
+                item: item,
+                listName: 'myShoppingList', // Replace with dynamic list name
+              );
+            },
+          );
+        },
       ),
       floatingActionButton: Container(
         width: MediaQuery.of(context).size.width,
@@ -49,7 +64,7 @@ class _HomeState extends State<Home> {
           backgroundColor: const Color.fromRGBO(247, 99, 60, 1.0),
           onPressed: () {
             createAlertDialog(context).then((newShoppingListName) {
-              widget.addNewShoppingList(newShoppingListName);
+              // Add new shopping list to Firestore
             });
           },
           tooltip: 'Create new list',

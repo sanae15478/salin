@@ -73,7 +73,7 @@ class _AuthScreenState extends State<AuthScreen>
                           0,
                           50 * (1 - _logoAnimation.value)), // Slight vertical animation
                       child: Image.asset(
-                        'assets/images/logosalin.png',
+                        'assets/images/salinlogo.png',
                         height: 200,
                         width: 200,
                         fit: BoxFit.contain,
