@@ -3,7 +3,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/material.dart';
 
 import '../../screens/HomeItem.dart';
-import '../../screens/ui/home.dart';
+
 
 class AuthController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -33,7 +33,7 @@ class AuthController {
         // Successful login, redirect to GroceryListScreen
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => Home()),
+          MaterialPageRoute(builder: (context) => HomePage()),
         );
       }
     } catch (e) {

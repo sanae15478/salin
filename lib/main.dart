@@ -2,8 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:salin/screens/HomeItem.dart';
 import 'package:salin/screens/authentification/login.dart'; // Login screen
-import 'package:salin/screens/ui/home.dart'; // Home screen
+
 
 void main() async {
 
@@ -37,7 +38,7 @@ class AuthenticationWrapper extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.active) {
           // If the user is logged in, show Home screen
           if (snapshot.hasData) {
-            return  Home();
+            return  HomePage();
           } else {
             // If the user is not logged in, show Login screen
             return  AuthScreen();

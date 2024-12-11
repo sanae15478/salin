@@ -4,7 +4,6 @@ import '../controllers/ItemController.dart';
 import '../models/Item.dart';
 import 'authentification/profile.dart';
 
-
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -23,31 +22,78 @@ class _HomePageState extends State<HomePage> {
   // List of units to choose from
   final List<String> _units = ['g', 'kg', 'L', 'qte'];
 
-  // Function to open the AlertDialog for adding a new item
   void _showAddItemDialog() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Add New Item'),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.0), // Rounded corners for the dialog
+          ),
+          backgroundColor: Colors.white, // Background color of the dialog
+          title: Row(
+            children: [
+              Icon(Icons.add_circle, color: Colors.pinkAccent[100], size: 30), // Icon in title
+              SizedBox(width: 10), // Space between the icon and the title text
+              Text(
+                'Add New Item',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              ),
+            ],
+          ),
           content: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
+              // Item Name TextField
               TextField(
                 controller: _itemNameController,
-                decoration: InputDecoration(labelText: 'Item Name'),
+                decoration: InputDecoration(
+                  labelText: 'Item Name',
+                  labelStyle: TextStyle(color: Colors.teal),
+                  prefixIcon: Icon(Icons.shopping_cart, color: Colors.teal), // Icon inside TextField
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                    borderSide: BorderSide(color: Colors.teal),
+                  ),
+                ),
               ),
+              SizedBox(height: 15),
+              // Price TextField
               TextField(
                 controller: _priceController,
-                decoration: InputDecoration(labelText: 'Price (DH)'),
+                decoration: InputDecoration(
+                  labelText: 'Price (DH)',
+                  labelStyle: TextStyle(color: Colors.teal),
+                  prefixIcon: Icon(Icons.attach_money, color: Colors.teal), // Icon inside TextField
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                    borderSide: BorderSide(color: Colors.teal),
+                  ),
+                ),
                 keyboardType: TextInputType.number,
               ),
+              SizedBox(height: 15),
+              // Quantity TextField
               TextField(
                 controller: _quantityController,
-                decoration: InputDecoration(labelText: 'Quantity'),
+                decoration: InputDecoration(
+                  labelText: 'Quantity',
+                  labelStyle: TextStyle(color: Colors.teal),
+                  prefixIcon: Icon(Icons.numbers, color: Colors.teal), // Icon inside TextField
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                    borderSide: BorderSide(color: Colors.teal),
+                  ),
+                ),
                 keyboardType: TextInputType.number,
               ),
+              SizedBox(height: 15),
+              // DropdownButton for Units
               DropdownButton<String>(
                 value: _selectedUnit,
                 onChanged: (String? newUnit) {
@@ -58,19 +104,35 @@ class _HomePageState extends State<HomePage> {
                 items: _units.map<DropdownMenuItem<String>>((String unit) {
                   return DropdownMenuItem<String>(
                     value: unit,
-                    child: Text(unit),
+                    child: Row(
+                      children: [
+                        Icon(Icons.layers, color: Colors.teal), // Icon inside DropdownItem
+                        SizedBox(width: 10),
+                        Text(unit),
+                      ],
+                    ),
                   );
                 }).toList(),
+                isExpanded: true,
+
               ),
             ],
           ),
           actions: [
+            // Cancel Button
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
               },
-              child: Text('Cancel'),
+              child: Row(
+                children: [
+                  Icon(Icons.cancel, color: Colors.grey), // Icon for Cancel action
+                  SizedBox(width: 5),
+                  Text('Cancel', style: TextStyle(color: Colors.grey)),
+                ],
+              ),
             ),
+            // Add Item Button
             TextButton(
               onPressed: () {
                 final String itemName = _itemNameController.text;
@@ -102,7 +164,13 @@ class _HomePageState extends State<HomePage> {
                   Navigator.of(context).pop();
                 }
               },
-              child: Text('Add Item'),
+              child: Row(
+                children: [
+                  Icon(Icons.check, color: Colors.green), // Icon for Add action
+                  SizedBox(width: 5),
+                  Text('Add Item', style: TextStyle(color: Colors.green)),
+                ],
+              ),
             ),
           ],
         );
@@ -199,35 +267,71 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // Widget for displaying the shopping list
+  // Widget for displaying the shopping list with styled checkboxes and icons
   Widget _buildShoppingList(List<ShoppingItem> items) {
     return ListView.builder(
       itemCount: items.length,
       itemBuilder: (context, index) {
         final item = items[index];
 
-        return ListTile(
-          title: Text(item.itemName ?? 'Unnamed Item'),
-          subtitle: Text(
-            'Price: ${item.price} DH, Quantity: ${item.quantity} ${item.unit}',
+        return Container(
+          margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
+          padding: const EdgeInsets.all(15.0),
+          decoration: BoxDecoration(
+            color: Colors.white, // Soft background color for each item
+            borderRadius: BorderRadius.circular(12.0),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                offset: Offset(0, 3),
+                blurRadius: 6.0,
+              ),
+            ],
           ),
-          trailing: Checkbox(
-            value: item.isBought,
-            onChanged: (bool? value) {
-              setState(() {
-                item.isBought = value ?? false;
-                _controller.updateItem(item); // Update the Firestore item
-              });
+          child: ListTile(
+            leading: Icon(
+              item.isBought ? Icons.check_circle : Icons.radio_button_unchecked,
+              color: item.isBought ? Colors.pinkAccent[100] : Colors.grey,
+              size: 30.0,
+            ),
+            title: Text(
+              item.itemName ?? 'Unnamed Item',
+              style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.bold, // Bold text for item name
+                color: Colors.black87, // Soft black color for text
+              ),
+            ),
+            subtitle: Text(
+              'Price: ${item.price} DH, Quantity: ${item.quantity} ${item.unit}',
+              style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.normal, // Lighter text for price and quantity
+                color: Colors.black54, // Softer gray color for subtitle
+              ),
+            ),
+            trailing: AnimatedSwitcher(
+              duration: Duration(milliseconds: 300),
+              child: Checkbox(
+                key: ValueKey<bool>(item.isBought),
+                value: item.isBought,
+                onChanged: (bool? value) {
+                  setState(() {
+                    item.isBought = value ?? false;
+                    _controller.updateItem(item); // Update the Firestore item
+                  });
+                },
+              ),
+            ),
+            onTap: () {
+              // Open the dialog to update the item
+              _showUpdateItemDialog(item);
+            },
+            onLongPress: () {
+              // Delete the item from Firestore
+              _controller.deleteItem(item.id ?? '');
             },
           ),
-          onTap: () {
-            // Open the dialog to update the item
-            _showUpdateItemDialog(item);
-          },
-          onLongPress: () {
-            // Delete the item from Firestore
-            _controller.deleteItem(item.id ?? '');
-          },
         );
       },
     );
@@ -238,15 +342,22 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: kBackgroundColor,
       appBar: AppBar(
-
         backgroundColor: kBackgroundColor,
-        title: const Text('Salin'),
+        title: const Text(
+          'Salin List',
+          style: TextStyle(
+            fontFamily: 'Pacifico',
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+            letterSpacing: 1.5,
+          ),
+        ),
         actions: [
           // Profile Icon added in AppBar
           IconButton(
-            icon: Icon(Icons.account_circle, color: Colors.black), // Profile icon
+            icon: Icon(Icons.account_circle, color: Colors.teal),
             onPressed: () {
-              // Navigate to ProfileScreen when icon is tapped
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => ProfileScreen()),
@@ -275,12 +386,11 @@ class _HomePageState extends State<HomePage> {
         width: MediaQuery.of(context).size.width,
         margin: const EdgeInsets.only(left: 35.0),
         child: FloatingActionButton(
-          backgroundColor: const Color.fromRGBO(84, 25, 210, 1.0),
-            onPressed: _showAddItemDialog,
-
-          tooltip: 'Create new list',
+          backgroundColor: Colors.teal,
+          onPressed: _showAddItemDialog,
+          tooltip: 'Create new item',
           child: const Text(
-            'Create new list',
+            'Create new item',
             style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.w700,
@@ -289,9 +399,6 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-
-
-
     );
   }
 }
