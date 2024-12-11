@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ShoppingItem {
@@ -7,6 +5,7 @@ class ShoppingItem {
   String? itemName;
   double? price;
   int? quantity;
+  String? unit;  // New field for units like "g", "kg", "L"
   bool isBought;
 
   ShoppingItem({
@@ -14,6 +13,7 @@ class ShoppingItem {
     this.itemName,
     this.price,
     this.quantity,
+    this.unit,  // Adding unit to the constructor
     this.isBought = false,
   });
 
@@ -25,6 +25,7 @@ class ShoppingItem {
       itemName: data['itemName'],
       price: data['price'],
       quantity: data['quantity'],
+      unit: data['unit'],  // Map unit field from Firestore
       isBought: data['isBought'] ?? false,
     );
   }
@@ -35,6 +36,7 @@ class ShoppingItem {
       'itemName': itemName,
       'price': price,
       'quantity': quantity,
+      'unit': unit,  // Include unit in the map
       'isBought': isBought,
     };
   }
