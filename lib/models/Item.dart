@@ -5,21 +5,23 @@ class ShoppingItem {
   String? itemName;
   double? price;
   int? quantity;
-  String? unit;  // New field for units like "g", "kg", "L"
+  String? unit;  // Field for units like "g", "kg", "L"
   bool isBought;
-  String? userId;  // New field to store the user ID
+  String? userId;  // Field to store the user ID
+  DateTime? dateAdded;  // New field for storing the date when the item was added
 
   ShoppingItem({
     this.id,
     this.itemName,
     this.price,
     this.quantity,
-    this.unit,  // Adding unit to the constructor
+    this.unit,
     this.isBought = false,
-    this.userId,  // Initialize userId
-  });
+    this.userId,
+    DateTime? dateAdded,  // Optional parameter for dateAdded
+  }) : dateAdded = dateAdded ?? DateTime.now();
 
-  // From Firestore
+  // From Firestore (converts Firestore document to ShoppingItem)
   factory ShoppingItem.fromFirestore(DocumentSnapshot doc) {
     Map data = doc.data() as Map;
     return ShoppingItem(
@@ -27,21 +29,24 @@ class ShoppingItem {
       itemName: data['itemName'],
       price: data['price'],
       quantity: data['quantity'],
-      unit: data['unit'],  // Map unit field from Firestore
+      unit: data['unit'],
       isBought: data['isBought'] ?? false,
-      userId: data['userId'],  // Map userId field from Firestore
+      userId: data['userId'],
+      // Handling dateAdded
+      dateAdded: data['dateAdded'] != null ? (data['dateAdded'] as Timestamp).toDate() : null, // Convert Timestamp to DateTime
     );
   }
 
-  // To Firestore
+  // To Firestore (converts ShoppingItem to a map for Firestore)
   Map<String, dynamic> toMap() {
     return {
       'itemName': itemName,
       'price': price,
       'quantity': quantity,
-      'unit': unit,  // Include unit in the map
+      'unit': unit,
       'isBought': isBought,
-      'userId': userId,  // Include userId in the map
+      'userId': userId,
+      'dateAdded': dateAdded != null ? Timestamp.fromDate(dateAdded!) : null,  // Store as Timestamp
     };
   }
 }
