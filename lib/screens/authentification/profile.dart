@@ -56,21 +56,10 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
     return Scaffold(
       backgroundColor: kBackgroundColor,
       appBar: AppBar(
-        surfaceTintColor: Colors.orange,
-        backgroundColor: Colors.white,
+
+        backgroundColor: kBackgroundColor,
         title: Text('Profile', style: TextStyle(color: Colors.black)),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.logout, color: Colors.black),
-            onPressed: () async {
-              await FirebaseAuth.instance.signOut();
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => AuthScreen()),
-              );
-            },
-          ),
-        ],
+
       ),
       body: user != null
           ? Center(  // Center the entire content
@@ -98,13 +87,8 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.person, color: Colors.black),
-                    SizedBox(width: 10),
-                    Text(
-                      'Name: ${user.displayName ?? 'No name'}',
-                      style: TextStyle(fontSize: 18, color: Colors.black),
-                      textAlign: TextAlign.center,
-                    ),
+
+
                   ],
                 ),
               ),
@@ -114,11 +98,11 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.email, color: Colors.black),
+                    Icon(Icons.email, color: Colors.grey),
                     SizedBox(width: 10),
                     Text(
                       'Email: ${user.email ?? 'No email'}',
-                      style: TextStyle(fontSize: 18, color: Colors.black),
+                      style: TextStyle(fontSize: 20, color: Colors.black),
                       textAlign: TextAlign.center,
                     ),
                   ],
@@ -145,7 +129,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                   ),
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.white,
-                    backgroundColor: Colors.teal,
+                    backgroundColor: Colors.deepPurple[200],
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),

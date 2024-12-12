@@ -13,12 +13,15 @@ class _SignupScreenState extends State<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _passwordconfirmController = TextEditingController();
+
   bool _isLoading = false;
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _passwordconfirmController.dispose();
     super.dispose();
   }
 
@@ -43,6 +46,7 @@ class _SignupScreenState extends State<SignupScreen> {
           message = 'Le mot de passe est trop faible.';
         } else if (e.code == 'email-already-in-use') {
           message = 'Cet email est déjà utilisé.';
+
         } else {
           message = 'Une erreur est survenue. Veuillez réessayer.';
         }
@@ -63,12 +67,12 @@ class _SignupScreenState extends State<SignupScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Inscription', style: TextStyle(color: Colors.black)),
-        centerTitle: true,
-        backgroundColor: Colors.white,
+
+        backgroundColor: kBackgroundColor,
         elevation: 0,
       ),
       backgroundColor: kBackgroundColor,
+
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: SingleChildScrollView(
@@ -79,36 +83,33 @@ class _SignupScreenState extends State<SignupScreen> {
               children: [
                 // Add an Icon or Image to the top of the signup screen
                 Center(
-                  child: Icon(
-                    Icons.app_registration,
-                    size: 100,
-                    color: Colors.teal,
+                  child: Image.asset(
+                    'assets/images/avatar.png',
+                    height: 200,
+                    width: 200,
+                    fit: BoxFit.contain,
                   ),
                 ),
                 SizedBox(height: 40),
 
-                // Signup heading with bold text
-                Text(
-                  'Créer un compte',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 40),
+
 
                 // Email TextField with icon
                 TextFormField(
                   controller: _emailController,
                   decoration: InputDecoration(
                     labelText: 'Email',
-                    labelStyle: TextStyle(color: Colors.black),
-                    border: OutlineInputBorder(),
+                    labelStyle: TextStyle(color: Colors.grey[600]),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide.none,
+                    ),
                     filled: true,
                     fillColor: Colors.white,
-                    prefixIcon: Icon(Icons.email, color: Colors.teal), // Icon added
+                    contentPadding: const EdgeInsets.symmetric(
+                        vertical: 18, horizontal: 20),
+
+
                   ),
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
@@ -128,11 +129,18 @@ class _SignupScreenState extends State<SignupScreen> {
                   controller: _passwordController,
                   decoration: InputDecoration(
                     labelText: 'Mot de passe',
-                    labelStyle: TextStyle(color: Colors.black),
-                    border: OutlineInputBorder(),
+                    labelStyle: TextStyle(color: Colors.grey[600]),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide.none,
+                    ),
+
                     filled: true,
                     fillColor: Colors.white,
-                    prefixIcon: Icon(Icons.lock, color: Colors.teal), // Icon added
+                    contentPadding: const EdgeInsets.symmetric(
+                        vertical: 18, horizontal: 20),
+
+
                   ),
                   obscureText: true,
                   validator: (value) {
@@ -145,6 +153,37 @@ class _SignupScreenState extends State<SignupScreen> {
                     return null;
                   },
                 ),
+                SizedBox(height: 16),
+
+                // Password TextField with icon
+                TextFormField(
+                  controller: _passwordconfirmController,
+                  decoration: InputDecoration(
+                    labelText: 'confirm Mot de passe',
+                    labelStyle: TextStyle(color: Colors.grey[600]),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide.none,
+                    ),
+
+                    filled: true,
+                    fillColor: Colors.white,
+                    contentPadding: const EdgeInsets.symmetric(
+                        vertical: 18, horizontal: 20),
+
+
+                  ),
+                  obscureText: true,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Veuillez confirmer le mot de passe.';
+                    }
+                    if (value.length != _passwordController.text.trim()) {
+                      return 'Veuillez confirmer le mot de passe .';
+                    }
+                    return null;
+                  },
+                ),
                 SizedBox(height: 32),
 
                 // Loading indicator or Sign Up Button
@@ -153,7 +192,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     : ElevatedButton(
                   onPressed: _signup,
                   child: Text(
-                    'S\'inscrire',
+                    'Sign up',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                   ),
                   style: ElevatedButton.styleFrom(
@@ -174,8 +213,10 @@ class _SignupScreenState extends State<SignupScreen> {
                     Navigator.pop(context); // Retour à l'écran précédent
                   },
                   child: Text(
-                    'Vous avez déjà un compte ? Connectez-vous.',
-                    style: TextStyle(color: Colors.black), // Text color
+                    'already have an account  ? Login.',
+                    style: TextStyle(fontSize: 14,
+                      color: Colors.teal,), // Text color
+
                   ),
                 ),
               ],
