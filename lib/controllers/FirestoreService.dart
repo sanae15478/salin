@@ -17,7 +17,7 @@ class FirestoreService {
         return ShoppingItem.fromFirestore(doc);
       }).toList();
     });
-  }
+  }*/
 
   // Update shopping item (e.g., mark as bought)
   Future<void> updateShoppingItem(
