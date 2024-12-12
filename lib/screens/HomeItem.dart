@@ -290,8 +290,8 @@ class _HomePageState extends State<HomePage> {
           ),
           child: ListTile(
             leading: Icon(
-              item.isBought ? Icons.check_circle : Icons.radio_button_unchecked,
-              color: item.isBought ? Colors.pinkAccent[100] : Colors.grey,
+              item.isBought ? Icons.ac_unit_sharp : Icons.radio_button_unchecked,
+              color: item.isBought ? Colors.cyan[100] : Colors.grey,
               size: 30.0,
             ),
             title: Text(
@@ -356,7 +356,7 @@ class _HomePageState extends State<HomePage> {
         actions: [
           // Profile Icon added in AppBar
           IconButton(
-            icon: Icon(Icons.account_circle, color: Colors.teal),
+            icon: Icon(Icons.account_circle, color: Colors.black26),
             onPressed: () {
               Navigator.push(
                 context,
@@ -386,7 +386,7 @@ class _HomePageState extends State<HomePage> {
         width: MediaQuery.of(context).size.width,
         margin: const EdgeInsets.only(left: 35.0),
         child: FloatingActionButton(
-          backgroundColor: Colors.teal,
+          backgroundColor: Colors.deepPurple[100],
           onPressed: _showAddItemDialog,
           tooltip: 'Create new item',
           child: const Text(
