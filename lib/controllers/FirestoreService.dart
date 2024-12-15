@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:salin/models/shopping_item.dart';
+import 'package:salin/models/Item.dart';
+
 import 'package:firebase_auth/firebase_auth.dart'; // For getting the current user
 
 class FirestoreService {
@@ -17,7 +18,7 @@ class FirestoreService {
         return ShoppingItem.fromFirestore(doc);
       }).toList();
     });
-  }*/
+  }
 
   // Update shopping item (e.g., mark as bought)
   Future<void> updateShoppingItem(
