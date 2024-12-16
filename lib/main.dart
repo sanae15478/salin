@@ -1,18 +1,20 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:salin/screens/HomeItem.dart'; // Page d'accueil
-import 'package:salin/screens/authentification/login.dart'; // Page de connexion
+import 'package:salin/screens/HomeItem.dart';
+import 'package:salin/screens/authentification/login.dart'; // Login screen
+
 
 void main() async {
+
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(); // Initialisation Firebase
+  await Firebase.initializeApp();  // Initialize Firebase
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,21 +27,24 @@ class MyApp extends StatelessWidget {
 }
 
 class AuthenticationWrapper extends StatelessWidget {
-  const AuthenticationWrapper({Key? key}) : super(key: key);
+  const AuthenticationWrapper({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Check if the user is logged in
     return StreamBuilder<User?>(
-      stream: FirebaseAuth.instance.authStateChanges(),
+      stream: FirebaseAuth.instance.authStateChanges(), // Listen for auth state changes
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.active) {
+          // If the user is logged in, show Home screen
           if (snapshot.hasData) {
-            return  HomeItem(); // Page d'accueil
+            return  HomeItem();
           } else {
-            return AuthScreen(); // Page de connexion
+            // If the user is not logged in, show Login screen
+            return  AuthScreen();
           }
         }
-        return const Center(child: CircularProgressIndicator());
+        return const CircularProgressIndicator(); // Loading state
       },
     );
   }

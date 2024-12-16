@@ -1,27 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:salin/controllers/FirestoreService.dart';
 
 class ShareListPage extends StatelessWidget {
   final String listId;
   final String listName;
 
-  const ShareListPage({Key? key, required this.listId, required this.listName})
+   ShareListPage({Key? key, required this.listId, required this.listName})
       : super(key: key);
 
-  Future<void> _sendEmail(String email, String listName) async {
-    final Uri emailUri = Uri(
-      scheme: 'mailto',
-      path: email,
-      queryParameters: {
-        'subject': 'Partage de la liste : $listName',
-        'body': 'Bonjour,\n\nVoici la liste "$listName".\n\nBonne journée !',
-      },
-    );
+  final FirestoreService _firestoreService = FirestoreService();
 
-    if (await canLaunchUrl(emailUri)) {
-      await launchUrl(emailUri);
+  Future<void> shareList(String email) async {
+    // Retrieve the shopping list document
+    DocumentSnapshot listDoc = await FirebaseFirestore.instance.collection('shopping_lists').doc(listId).get();
+
+    if (listDoc.exists) {
+      // Add shared email to the list document
+      await FirebaseFirestore.instance.collection('shopping_lists').doc(listId).update({
+        'sharedWith': FieldValue.arrayUnion([email]),
+      });
+
+      // Provide user feedback
+      print('List shared successfully with $email');
     } else {
-      print("Impossible d'ouvrir le client email.");
+      print('Error: List not found');
     }
   }
 
@@ -43,7 +46,6 @@ class ShareListPage extends StatelessWidget {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 20),
-            // Champ pour saisir l'adresse email
             TextField(
               controller: emailController,
               decoration: InputDecoration(
@@ -54,12 +56,14 @@ class ShareListPage extends StatelessWidget {
               keyboardType: TextInputType.emailAddress,
             ),
             SizedBox(height: 20),
-            // Bouton pour envoyer par email
             Center(
               child: ElevatedButton.icon(
                 onPressed: () {
                   if (emailController.text.isNotEmpty) {
-                    _sendEmail(emailController.text, listName);
+                    shareList(emailController.text);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('List shared with ${emailController.text}')),
+                    );
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text('Veuillez entrer une adresse email')),

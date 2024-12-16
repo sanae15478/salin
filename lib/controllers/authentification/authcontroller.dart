@@ -57,6 +57,7 @@ class AuthController {
       );
     } catch (e) {
       // Handle errors, such as showing a snackbar
+      print("$e");
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Email Sign-In failed: $e")),
       );
