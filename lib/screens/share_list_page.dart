@@ -1,9 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ShareListPage extends StatelessWidget {
+  final String listId;
   final String listName;
 
-  const ShareListPage({Key? key, required this.listName}) : super(key: key);
+  const ShareListPage({Key? key, required this.listId, required this.listName})
+      : super(key: key);
+
+  Future<void> _sendEmail(String email, String listName) async {
+    final Uri emailUri = Uri(
+      scheme: 'mailto',
+      path: email,
+      queryParameters: {
+        'subject': 'Partage de la liste : $listName',
+        'body': 'Bonjour,\n\nVoici la liste "$listName".\n\nBonne journée !',
+      },
+    );
+
+    if (await canLaunchUrl(emailUri)) {
+      await launchUrl(emailUri);
+    } else {
+      print("Impossible d'ouvrir le client email.");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -11,41 +31,43 @@ class ShareListPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Partager la liste"),
-        backgroundColor: Colors.teal,
+        title: Text('Partager la Liste'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              "Entrez l'adresse e-mail pour partager la liste :",
-              style: TextStyle(fontSize: 18),
+            Text(
+              'Partage de la liste : "$listName"',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 10),
+            SizedBox(height: 20),
+            // Champ pour saisir l'adresse email
             TextField(
               controller: emailController,
               decoration: InputDecoration(
-                hintText: "Adresse e-mail",
+                labelText: 'Adresse Email',
+                prefixIcon: Icon(Icons.email),
                 border: OutlineInputBorder(),
-                prefixIcon: const Icon(Icons.email),
               ),
+              keyboardType: TextInputType.emailAddress,
             ),
-            const SizedBox(height: 20),
-            ElevatedButton.icon(
-              onPressed: () {
-                // Logique d'envoi d'e-mail
-                print("Envoyer la liste '$listName' à ${emailController.text}");
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("Liste '$listName' envoyée à ${emailController.text}")),
-                );
-              },
-              icon: const Icon(Icons.send),
-              label: const Text("Envoyer"),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.teal,
-                foregroundColor: Colors.white,
+            SizedBox(height: 20),
+            // Bouton pour envoyer par email
+            Center(
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  if (emailController.text.isNotEmpty) {
+                    _sendEmail(emailController.text, listName);
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Veuillez entrer une adresse email')),
+                    );
+                  }
+                },
+                icon: Icon(Icons.send),
+                label: Text('Envoyer par Email'),
               ),
             ),
           ],

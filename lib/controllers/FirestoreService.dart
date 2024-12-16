@@ -47,4 +47,16 @@ class FirestoreService {
         .doc(itemId)
         .update({'isBought': isBought});
   }
+
+  // Méthode pour générer un lien de partage unique
+  Future<String> generateShareLink(String listId, Map<String, dynamic> listData) async {
+    try {
+      await _db.collection('shared_lists').doc(listId).set(listData);
+      String shareLink = "https://votreapp.com/share?listId=$listId"; // URL fictive, remplacez par la vôtre
+      return shareLink;
+    } catch (e) {
+      print("Erreur lors de la génération du lien : $e");
+      throw Exception("Impossible de générer le lien de partage.");
+    }
+  }
 }
