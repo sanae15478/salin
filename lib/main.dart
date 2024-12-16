@@ -1,13 +1,13 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:salin/screens/HomeItem.dart';
-import 'package:salin/screens/authentification/login.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:salin/screens/HomeItem.dart'; // Page d'accueil
+import 'package:salin/screens/authentification/login.dart'; // Page de connexion
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(); // Initialisation Firebase
   runApp(const MyApp());
 }
 
@@ -34,7 +34,7 @@ class AuthenticationWrapper extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.active) {
           if (snapshot.hasData) {
-            return  HomePage(); // Page principale
+            return  HomeItem(); // Page d'accueil
           } else {
             return AuthScreen(); // Page de connexion
           }

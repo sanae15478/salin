@@ -1,51 +1,50 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:salin/models/Item.dart';
-
-import 'package:firebase_auth/firebase_auth.dart'; // For getting the current user
+import '../models/Item.dart'; // Import du modèle ShoppingItem
 
 class FirestoreService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  // Fetch shopping list items from Firestore
-  Stream<List<ShoppingItem>> getShoppingItems(String listName) {
-    return _db
-        .collection('shopping_lists')
-        .doc(listName)
-        .collection('items')
-        .snapshots()
-        .map((snapshot) {
-      return snapshot.docs.map((doc) {
-        return ShoppingItem.fromFirestore(doc);
-      }).toList();
+  // Créer une nouvelle liste d'articles
+  Future<void> createShoppingList(String listName) async {
+    await _db.collection('shopping_lists').add({'name': listName});
+  }
+
+  // Récupérer les listes disponibles
+  Stream<List<DocumentSnapshot>> getShoppingLists() {
+    return _db.collection('shopping_lists').snapshots().map((snapshot) {
+      return snapshot.docs;
     });
   }
 
-  // Update shopping item (e.g., mark as bought)
-  Future<void> updateShoppingItem(
-      String listName, String itemId, bool isBought) async {
+  // Ajouter un nouvel article dans une liste
+  Future<void> addShoppingItem(String listId, ShoppingItem item) async {
     await _db
         .collection('shopping_lists')
-        .doc(listName)
+        .doc(listId)
+        .collection('items')
+        .add(item.toMap());
+  }
+
+  // Récupérer les articles d'une liste
+  Stream<List<ShoppingItem>> getItems(String listId) {
+    return _db
+        .collection('shopping_lists')
+        .doc(listId)
+        .collection('items')
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+        .map((doc) => ShoppingItem.fromFirestore(doc))
+        .toList());
+  }
+
+  // Mettre à jour un article
+  Future<void> updateShoppingItem(
+      String listId, String itemId, bool isBought) async {
+    await _db
+        .collection('shopping_lists')
+        .doc(listId)
         .collection('items')
         .doc(itemId)
         .update({'isBought': isBought});
-  }
-
-  Future<void> addShoppingItem(String listName, ShoppingItem item) async {
-    String userId = FirebaseAuth.instance.currentUser!.uid; // Get current user ID
-
-    // Add the shopping item to Firestore with the userId in shopping_lists
-    await _db.collection('shopping_lists')
-        .doc(listName)
-        .collection('items')
-        .add({
-      ...item.toMap(),
-      'userId': userId, // Add userId to each item
-    });
-
-    // Optionally, you can add userId to the shopping list itself (not individual items)
-    await _db.collection('shopping_lists').doc(listName).set({
-      'userId': userId, // Add userId to the shopping list document
-    }, SetOptions(merge: true));
   }
 }
