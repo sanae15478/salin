@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get_rx/get_rx.dart';
 import '../models/Item.dart';  // Import the ShoppingItem model
 import 'package:firebase_auth/firebase_auth.dart';  // Import FirebaseAuth to get the current user's ID
-
+import 'package:async/async.dart';
 class FirestoreService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
@@ -27,6 +28,7 @@ class FirestoreService {
   }
 
   // Récupérer les listes disponibles (including lists where the user is the owner)
+  /*
   Stream<List<DocumentSnapshot>> getShoppingLists() {
     String? userId = getCurrentUserId();
     if (userId != null) {
@@ -39,7 +41,38 @@ class FirestoreService {
     } else {
       return Stream.value([]);  // Return an empty stream if no user is logged in
     }
+  }*/
+
+  Stream<List<DocumentSnapshot>> getShoppingLists() {
+    String? userId = getCurrentUserId();
+    String? userEmail = FirebaseAuth.instance.currentUser?.email?.toLowerCase();
+
+
+    if (userId != null && userEmail != null) {
+      final userListsStream = FirebaseFirestore.instance
+          .collection('shopping_lists')
+          .where('userId', isEqualTo: userId)
+          .snapshots();
+
+      final sharedListsStream = FirebaseFirestore.instance
+          .collection('shopping_lists')
+          .where('sharedWith', arrayContains: userEmail)
+          .snapshots();
+
+      // Merge both streams
+      return StreamGroup.merge([userListsStream, sharedListsStream]).map((event) {
+        final allDocs = <String, DocumentSnapshot>{};
+        for (var doc in event.docs) {
+          allDocs[doc.id] = doc;
+        }
+        return allDocs.values.toList();
+      });
+    } else {
+      return Stream.value([]);
+    }
   }
+
+
 
   // Ajouter un nouvel article dans une liste (include user ID)
   Future<void> addShoppingItem(String listId, ShoppingItem item) async {
