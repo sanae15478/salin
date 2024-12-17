@@ -197,7 +197,7 @@ class _HomeItemState extends State<HomeItem> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ListItemsPage(listId: list.id),
+                              builder: (context) => ListItemsPage(listId: list.id,listName: list["name"]),
                             ),
                           );
                         },
@@ -222,9 +222,9 @@ class _HomeItemState extends State<HomeItem> {
               _firestoreService.createShoppingList(newShoppingListName);
             });
           },
-          tooltip: 'Create new item',
+          tooltip: 'Create new List',
           child: const Text(
-            'Create new item',
+            'Create new List',
             style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.w700,
