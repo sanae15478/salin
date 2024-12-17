@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get_rx/get_rx.dart';
 import '../models/Item.dart';  // Import the ShoppingItem model
@@ -11,7 +13,10 @@ class FirestoreService {
     User? user = FirebaseAuth.instance.currentUser;
     return user?.uid;
   }
-
+  String? getCurrentUserEmial() {
+    User? user = FirebaseAuth.instance.currentUser;
+    return user?.email;
+  }
   // Créer une nouvelle liste d'articles
   Future<void> createShoppingList(String listName) async {
     String? userId = getCurrentUserId();
@@ -20,6 +25,8 @@ class FirestoreService {
       await _db.collection('shopping_lists').add({
         'name': listName,
         'userId': userId,  // Store the user ID with the list
+        'ownedBy':getCurrentUserEmial(),
+        'sharedWith':"none",
         'dateCreated': Timestamp.now(),  // Add a date field for list creation
       });
     } else {
@@ -28,7 +35,7 @@ class FirestoreService {
   }
 
   // Récupérer les listes disponibles (including lists where the user is the owner)
-  /*
+/*
   Stream<List<DocumentSnapshot>> getShoppingLists() {
     String? userId = getCurrentUserId();
     if (userId != null) {
@@ -41,34 +48,83 @@ class FirestoreService {
     } else {
       return Stream.value([]);  // Return an empty stream if no user is logged in
     }
-  }*/
-
+  }
+*//*
   Stream<List<DocumentSnapshot>> getShoppingLists() {
     String? userId = getCurrentUserId();
     String? userEmail = FirebaseAuth.instance.currentUser?.email?.toLowerCase();
 
-
     if (userId != null && userEmail != null) {
+      // Stream for lists owned by the user
       final userListsStream = FirebaseFirestore.instance
           .collection('shopping_lists')
           .where('userId', isEqualTo: userId)
           .snapshots();
 
+      // Stream for lists shared with the user
       final sharedListsStream = FirebaseFirestore.instance
           .collection('shopping_lists')
           .where('sharedWith', arrayContains: userEmail)
           .snapshots();
 
-      // Merge both streams
-      return StreamGroup.merge([userListsStream, sharedListsStream]).map((event) {
+      // Using a StreamController to merge the two streams manually
+      final controller = StreamController<List<DocumentSnapshot>>();
+
+      // Combine both streams and send their results to the StreamController
+      StreamSubscription? userSubscription;
+      StreamSubscription? sharedSubscription;
+
+      userSubscription = userListsStream.listen((userSnapshot) {
         final allDocs = <String, DocumentSnapshot>{};
-        for (var doc in event.docs) {
+
+        // Add user-owned lists
+        for (var doc in userSnapshot.docs) {
           allDocs[doc.id] = doc;
         }
-        return allDocs.values.toList();
+
+        // Emit the combined result
+        controller.add(allDocs.values.toList());
       });
+
+      sharedSubscription = sharedListsStream.listen((sharedSnapshot) {
+        final allDocs = <String, DocumentSnapshot>{};
+
+        // Add shared lists
+        for (var doc in sharedSnapshot.docs) {
+          allDocs[doc.id] = doc;
+        }
+
+        // Emit the combined result
+        controller.add(allDocs.values.toList());
+      });
+
+      // Return the merged stream
+      return controller.stream;
     } else {
       return Stream.value([]);
+    }
+  }*/
+  Stream<List<String>> getSharedWithEmails(String listId) {
+    return _db.collection('shopping_lists').doc(listId).snapshots().map((doc) {
+      List<dynamic> sharedWith = doc.data()?['sharedWith'] ?? [];
+      return sharedWith.cast<String>();
+    });
+  }
+
+  Stream<List<DocumentSnapshot>> getShoppingLists(bool showOwnedLists) {
+    String? userEmail = FirebaseAuth.instance.currentUser?.email?.toLowerCase();
+    if (showOwnedLists) {
+      return FirebaseFirestore.instance
+          .collection('shopping_lists')
+          .where('userId', isEqualTo: FirebaseAuth.instance.currentUser?.uid)
+          .snapshots()
+          .map((snapshot) => snapshot.docs);
+    } else {
+      return FirebaseFirestore.instance
+          .collection('shopping_lists')
+          .where('sharedWith', arrayContains: userEmail)
+          .snapshots()
+          .map((snapshot) => snapshot.docs);
     }
   }
 
