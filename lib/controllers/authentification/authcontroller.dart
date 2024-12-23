@@ -33,7 +33,7 @@ class AuthController {
         // Successful login, redirect to GroceryListScreen
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => HomePage()),
+          MaterialPageRoute(builder: (context) => HomeItem()),
         );
       }
     } catch (e) {
@@ -53,7 +53,7 @@ class AuthController {
       // Successful login, redirect to GroceryListScreen
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => HomePage()),
+        MaterialPageRoute(builder: (context) => HomeItem()),
       );
     } catch (e) {
       // Handle errors, such as showing a snackbar

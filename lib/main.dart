@@ -38,7 +38,7 @@ class AuthenticationWrapper extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.active) {
           // If the user is logged in, show Home screen
           if (snapshot.hasData) {
-            return  HomePage();
+            return  HomeItem();
           } else {
             // If the user is not logged in, show Login screen
             return  AuthScreen();
