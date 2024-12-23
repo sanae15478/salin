@@ -178,7 +178,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     if (value == null || value.isEmpty) {
                       return 'Veuillez confirmer le mot de passe.';
                     }
-                    if (value.length != _passwordController.text.trim()) {
+                    if (value != _passwordController.text.trim()) {
                       return 'Veuillez confirmer le mot de passe .';
                     }
                     return null;
