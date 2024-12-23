@@ -337,37 +337,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-
-  // List of filter options
-  final List<String> _filterOptions = [
-    'Today',
-    'Yesterday',
-    'Last Week',
-    'Last Two Weeks',
-    'Last Month',
-    'All Items'
-  ];
-
-  String _selectedFilter = 'All Items'; // Default filter is 'All Items'
-
-  // Function to fetch items based on the selected filter
-  Stream<List<ShoppingItem>> _getItemsBasedOnFilter() {
-    switch (_selectedFilter) {
-      case 'Today':
-        return _controller.getItemsToday();
-      case 'Yesterday':
-        return _controller.getItemsForYesterday();
-      case 'Last Week':
-        return _controller.getItemsForLastWeek();
-      case 'Last Two Weeks':
-        return _controller.getItemsForLastTwoWeeks();
-      case 'Last Month':
-        return _controller.getItemsForLastMonth();
-      default:
-        return _controller.getItems(); // All items
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -375,7 +344,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         backgroundColor: kBackgroundColor,
         title: const Text(
-          'Shopping List',
+          'Salin List',
           style: TextStyle(
             fontFamily: 'Pacifico',
             fontSize: 30,
@@ -397,64 +366,21 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          // Dropdown filter
-          Padding(
-            padding: const EdgeInsets.all(26.0),
-            child: Row(
-              children: [
-                Icon(Icons.calendar_today, color: Colors.deepPurple), // Calendar icon
-                SizedBox(width: 7), // Space between icon and dropdown
-                Expanded(
-                  child: DropdownButton<String>(
-                    value: _selectedFilter,
-                    onChanged: (String? newFilter) {
-                      setState(() {
-                        _selectedFilter = newFilter!;
-                      });
-                    },
-                    isExpanded: true,  // Ensure the dropdown takes full width
-                    items: _filterOptions.map<DropdownMenuItem<String>>((String filter) {
-                      return DropdownMenuItem<String>(
-                        value: filter,
-                        child: Text(
-                          filter,
+      body: StreamBuilder<List<ShoppingItem>>(
+        stream: _controller.getItems(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
 
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            color: Colors.black87,  // Text color
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Center(child: Text('No items found.'));
+          }
 
+          final items = snapshot.data!;
 
-          // StreamBuilder to display filtered items
-          Expanded(
-            child: StreamBuilder<List<ShoppingItem>>(
-              stream: _getItemsBasedOnFilter(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
-                }
-
-                if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return Center(child: Text('No items found.'));
-                }
-
-                final items = snapshot.data!;
-
-                return _buildShoppingList(items);
-              },
-            ),
-          ),
-        ],
+          return _buildShoppingList(items);
+        },
       ),
       floatingActionButton: Container(
         width: MediaQuery.of(context).size.width,
@@ -474,4 +400,5 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
-  }}
+  }
+}
