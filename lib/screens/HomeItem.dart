@@ -123,7 +123,7 @@ class _HomeItemState extends State<HomeItem> {
                             ...sharedEmails.map((email) {
                               return Padding(
                                 padding: const EdgeInsets.only(right: 5.0),
-                                child: GestureDetector(
+                                child: email.isNotEmpty?GestureDetector(
                                   onTap: () {
                                     // Navigate to the share page when an email icon is tapped
                                     Navigator.push(
@@ -141,7 +141,7 @@ class _HomeItemState extends State<HomeItem> {
                                     child: Text(email.isNotEmpty ? email[0].toUpperCase() : ''),
                                     radius: 15,
                                   ),
-                                ),
+                                ):Container(),
                               );
                             }).toList(),
                             // If the list is owned by the user, show their first letter in an avatar
@@ -162,7 +162,7 @@ class _HomeItemState extends State<HomeItem> {
                                     );
                                   },
                                   child: CircleAvatar(
-                                    backgroundColor: Colors.pink[200],
+                                    backgroundColor: Colors.teal[200],
                                     child: Text(ownerFirstLetter, style: TextStyle(color: Colors.white)),
                                     radius: 15,
                                   ),
@@ -186,7 +186,7 @@ class _HomeItemState extends State<HomeItem> {
                                 },
                                 child: CircleAvatar(
                                   backgroundColor: Colors.pink[200],
-                                  child: Icon(Icons.add, color: Colors.white, size: 18),
+                                  child: Icon(Icons.add_reaction, color: Colors.white, size: 18),
                                   radius: 15,
                                 ),
                               ),

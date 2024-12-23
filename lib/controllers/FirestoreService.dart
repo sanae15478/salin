@@ -26,7 +26,7 @@ class FirestoreService {
         'name': listName,
         'userId': userId,  // Store the user ID with the list
         'ownedBy':getCurrentUserEmial(),
-        'sharedWith':"none",
+        'sharedWith':"",
         'dateCreated': Timestamp.now(),  // Add a date field for list creation
       });
     } else {
